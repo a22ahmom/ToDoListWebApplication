@@ -6,10 +6,6 @@ const allTaskDiv = document.createElement("div");
 allTaskDiv.style.width = "400px";
 allTaskDiv.style.margin = "auto";
 
-window.onload = (event) => {
-    // hideTaskDiv();
-}
-
 let numOfTask = 0;
 
 clickButton.onclick = function () {
