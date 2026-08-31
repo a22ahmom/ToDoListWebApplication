@@ -16,7 +16,7 @@ clickButton.onclick = function () {
     if (text !== "") {
 
         const mainTaskDiv = document.createElement("div");
-        mainTaskDiv.style.background = "linear-gradient(to bottom, #2F3C42 0%, #2A353A 50%, #242D31 100%)";
+        mainTaskDiv.style.background = "white";
         // mainTaskDiv.style.height = "40px";
         mainTaskDiv.style.width = "260px";
         mainTaskDiv.style.borderRadius = "30px";
@@ -27,18 +27,19 @@ clickButton.onclick = function () {
         mainTaskDiv.style.columnGap = "5px";
         mainTaskDiv.style.marginTop = "20px";
 
-        const headingThree = document.createElement("h3");
+        const headingThree = document.createElement("h5");
         headingThree.style.margin = "auto";
         headingThree.style.wordBreak = "break-word";
         headingThree.style.whiteSpace = "normal";
         headingThree.textContent = text;
-        headingThree.style.color = "#CFCFCF";
+        // headingThree.style.color = "black";
         headingThree.style.fontWeight = "normal";
+        headingThree.classList.add("h5");
 
         const taskContainer = document.createElement("div");
         // taskContainer.style.backgroundColor = "lightBlue";
         // taskContainer.style.height = "25px";
-        taskContainer.style.width = "150px";
+        taskContainer.style.width = "130px";
         // taskContainer.style.justifyContent = "center";
 
         const buttonContainer = document.createElement("div");
@@ -49,23 +50,22 @@ clickButton.onclick = function () {
         buttonContainer.style.display = "flex";
         buttonContainer.style.justifyContent = "center";
         buttonContainer.style.alignItems = "center";
+        buttonContainer.style.gap = "5px";
 
         const completedBtn = document.createElement("button");
-        completedBtn.style.height = "35px";
-        completedBtn.style.width = "35px";
-        completedBtn.style.borderRadius = "30px";
-        completedBtn.style.backgroundColor = "#E38E7D";
-        completedBtn.style.fontSize = "23px";
-        completedBtn.textContent = "✓";
+        completedBtn.classList.add("btn", "btn-outline-success");
+        const completedBtnIcon = document.createElement("i");
+        completedBtnIcon.classList.add("bi", "bi-check-square");
+
+        completedBtn.appendChild(completedBtnIcon);
 
         const deleteBtn = document.createElement("button");
-        deleteBtn.style.height = "35px";
-        deleteBtn.style.width = "35px";
-        deleteBtn.style.borderRadius = "30px";
-        deleteBtn.style.backgroundColor = "#E38E7D";
-        deleteBtn.style.fontSize = "23px";
-        deleteBtn.style.marginLeft = "10px";
-        deleteBtn.textContent = "🗑";
+        deleteBtn.classList.add("btn", "btn-outline-danger");
+
+        const deleteBtnIcon = document.createElement("i");
+        deleteBtnIcon.classList.add("bi", "bi-trash");
+
+        deleteBtn.appendChild(deleteBtnIcon);
 
         buttonContainer.appendChild(completedBtn);
         buttonContainer.appendChild(deleteBtn);
@@ -96,13 +96,13 @@ clickButton.onclick = function () {
             allTaskDiv.removeChild(mainTaskDiv);
         });
 
-        completedBtn.addEventListener("mouseover", () => {
-            completedBtn.style.backgroundColor = "#41B04C";
-        });
+        // completedBtn.addEventListener("mouseover", () => {
+        //     completedBtn.style.backgroundColor = "#41B04C";
+        // });
 
-        completedBtn.addEventListener("mouseout", () => {
-            completedBtn.style.backgroundColor = "#E38E7D";
-        });
+        // completedBtn.addEventListener("mouseout", () => {
+        //     completedBtn.style.backgroundColor = "#E38E7D";
+        // });
 
         deleteBtn.addEventListener("mouseover", () => {
             deleteBtn.style.backgroundColor = "#E53412";
