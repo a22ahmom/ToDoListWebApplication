@@ -10,4 +10,19 @@ db.exec(`
     )
 `);
 
+// const insertTask = db.prepare(`
+//     INSERT INTO tasks (text)
+//     VALUES (?)
+// `);
+
+// insertTask.run("Learn SQLite");
+
+const readTask = db.prepare(`
+
+    SELECT * FROM tasks
+
+`).all();
+
+console.log(readTask);
+
 console.log("Database connected!");
