@@ -26,6 +26,7 @@ clickButton.onclick = function () {
         mainTaskDiv.style.alignItems = "center";
         mainTaskDiv.style.columnGap = "5px";
         mainTaskDiv.style.marginTop = "20px";
+        mainTaskDiv.classList.add("border", "border-dark");
 
         const headingThree = document.createElement("h5");
         headingThree.style.margin = "auto";
@@ -83,11 +84,11 @@ clickButton.onclick = function () {
 
         completedBtn.addEventListener("click", () => {
 
-            if (headingThree.style.textDecoration === "none") {
-                headingThree.style.textDecoration = "line-through";
+            if (mainTaskDiv.style.background === "white") {
+                mainTaskDiv.style.background = "lightGreen";
             }
             else {
-                headingThree.style.textDecoration = "none";
+                mainTaskDiv.style.background = "white";
             }
         });
 
@@ -96,21 +97,6 @@ clickButton.onclick = function () {
             allTaskDiv.removeChild(mainTaskDiv);
         });
 
-        // completedBtn.addEventListener("mouseover", () => {
-        //     completedBtn.style.backgroundColor = "#41B04C";
-        // });
-
-        // completedBtn.addEventListener("mouseout", () => {
-        //     completedBtn.style.backgroundColor = "#E38E7D";
-        // });
-
-        deleteBtn.addEventListener("mouseover", () => {
-            deleteBtn.style.backgroundColor = "#E53412";
-        });
-
-        deleteBtn.addEventListener("mouseout", () => {
-            deleteBtn.style.backgroundColor = "#E38E7D";
-        });
     }
     else {
         console.log("EMPTY");
