@@ -37,6 +37,21 @@ app.post("/tasks", (req, res) => {
     });
 });
 
+app.delete("/tasks", (req, res) => {
+
+    const id = req.body.id;
+
+    const deleteTask = db.prepare(`
+        DELETE FROM tasks WHERE id = ?
+    `);
+
+    const result = deleteTask.run(id);
+
+    res.json({
+        messsage: "Task deleted"
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

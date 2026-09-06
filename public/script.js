@@ -9,16 +9,10 @@ allTaskDiv.style.margin = "auto";
 
 let numOfTask = 0;
 
-function createTask(textInput) {
+function createTask(taskId, textInput) {
+    // console.log(taskId);
 
     numOfTask++;
-
-    // const usersTask = userInput.value.trim();
-
-    if (textInput === "") {
-        console.log("Empty");
-        return;
-    }
 
     /** ********************************************** */
     const mainTaskDiv = document.createElement("div");
@@ -111,15 +105,34 @@ function createTask(textInput) {
         }
     });
 
-    deleteBtn.addEventListener("click", () => {
-        console.log("deleted");
+    deleteBtn.addEventListener("click", async () => {
+
+        const response = await fetch("/tasks", {
+            method: "DELETE",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                id: taskId
+            })
+        });
+
         allTaskDiv.removeChild(mainTaskDiv);
+
+        console.log("deleted");
     });
 }
 
 createButton.addEventListener("click", async () => {
 
     const usersTask = userInput.value.trim();
+
+    if (usersTask === "") {
+        console.log("Empty");
+        return;
+    }
 
     const response = await fetch("/tasks", {
         method: "POST",
@@ -134,18 +147,21 @@ createButton.addEventListener("click", async () => {
     });
 
     const task = await response.json();
-    console.log(task);
 
-    createTask(usersTask);
+    // console.log(task);
+
+    createTask(task.id, usersTask);
 });
 
+
 document.addEventListener("DOMContentLoaded", async function () {
+
     const response = await fetch("/tasks");
+    const currentTask = await response.json();
 
-    const task = await response.json();
-
-    for(let i = 0; i < task.length; i++){
-        let tasks = task[i].text;
-        createTask(tasks);
+    for (let i = 0; i < currentTask.length; i++) {
+        let id = currentTask[i].id;
+        let task = currentTask[i].text;
+        createTask(id, task);
     }
 });
