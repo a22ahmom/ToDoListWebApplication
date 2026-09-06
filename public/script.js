@@ -6,9 +6,6 @@ const allTaskDiv = document.createElement("div");
 allTaskDiv.style.width = "400px";
 allTaskDiv.style.margin = "auto";
 
-const mainTaskDiv = document.createElement("div");
-const completedBtn = document.createElement("button");
-const deleteBtn = document.createElement("button");
 
 let numOfTask = 0;
 
@@ -24,6 +21,7 @@ function createTask(textInput) {
     }
 
     /** ********************************************** */
+    const mainTaskDiv = document.createElement("div");
     mainTaskDiv.style.background = "white";
     // mainTaskDiv.style.height = "40px";
     mainTaskDiv.style.width = "260px";
@@ -70,6 +68,8 @@ function createTask(textInput) {
     /** ********************************************** */
 
     /** ********************************************** */
+    const completedBtn = document.createElement("button");
+
     completedBtn.classList.add("btn", "btn-outline-success");
 
     const completedBtnIcon = document.createElement("i");
@@ -79,6 +79,8 @@ function createTask(textInput) {
     /** ********************************************** */
 
     /** ********************************************** */
+    const deleteBtn = document.createElement("button");
+
     deleteBtn.classList.add("btn", "btn-outline-danger");
 
     const deleteBtnIcon = document.createElement("i");
@@ -98,6 +100,21 @@ function createTask(textInput) {
     /** ********************************************** */
 
     numOfTask = 0;
+
+    completedBtn.addEventListener("click", () => {
+
+        if (mainTaskDiv.style.background === "white") {
+            mainTaskDiv.style.background = "lightGreen";
+        }
+        else {
+            mainTaskDiv.style.background = "white";
+        }
+    });
+
+    deleteBtn.addEventListener("click", () => {
+        console.log("deleted");
+        allTaskDiv.removeChild(mainTaskDiv);
+    });
 }
 
 createButton.addEventListener("click", async () => {
@@ -122,28 +139,13 @@ createButton.addEventListener("click", async () => {
     createTask(usersTask);
 });
 
-completedBtn.addEventListener("click", () => {
-
-    if (mainTaskDiv.style.background === "white") {
-        mainTaskDiv.style.background = "lightGreen";
-    }
-    else {
-        mainTaskDiv.style.background = "white";
-    }
-});
-
-deleteBtn.addEventListener("click", () => {
-    console.log("deleted");
-    allTaskDiv.removeChild(mainTaskDiv);
-});
-
 document.addEventListener("DOMContentLoaded", async function () {
-    // console.log("Content loaded");
-
     const response = await fetch("/tasks");
 
     const task = await response.json();
-    // console.log(task);
 
-
+    for(let i = 0; i < task.length; i++){
+        let tasks = task[i].text;
+        createTask(tasks);
+    }
 });
