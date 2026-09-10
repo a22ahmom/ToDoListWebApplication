@@ -6,27 +6,37 @@ const allTaskDiv = document.createElement("div");
 allTaskDiv.style.width = "400px";
 allTaskDiv.style.margin = "auto";
 
+// let mainTaskDiv;
+const mainTaskDiv = document.createElement("div");
+// mainTaskDiv.style.background = "purple";
+// mainTaskDiv.style.height = "40px";
+mainTaskDiv.style.width = "260px";
+mainTaskDiv.style.borderRadius = "30px";
+mainTaskDiv.style.margin = "auto";
+mainTaskDiv.style.display = "block";
+mainTaskDiv.style.justifyContent = "center";
+mainTaskDiv.style.alignItems = "center";
+mainTaskDiv.style.columnGap = "5px";
+mainTaskDiv.style.marginTop = "20px";
+// mainTaskDiv.classList.add("border", "border-dark");
 
-let numOfTask = 0;
+// let numOfTask = 0;
 
 function createTask(taskId, textInput) {
-    // console.log(taskId);
-
-    numOfTask++;
 
     /** ********************************************** */
-    const mainTaskDiv = document.createElement("div");
-    mainTaskDiv.style.background = "white";
-    // mainTaskDiv.style.height = "40px";
-    mainTaskDiv.style.width = "260px";
-    mainTaskDiv.style.borderRadius = "30px";
-    mainTaskDiv.style.margin = "auto";
-    mainTaskDiv.style.display = "flex";
-    mainTaskDiv.style.justifyContent = "center";
-    mainTaskDiv.style.alignItems = "center";
-    mainTaskDiv.style.columnGap = "5px";
-    mainTaskDiv.style.marginTop = "20px";
-    mainTaskDiv.classList.add("border", "border-dark");
+    const taskContainer = document.createElement("div");
+    taskContainer.style.background = "white";
+    // taskContainer.style.height = "40px";
+    taskContainer.style.width = "260px";
+    taskContainer.style.borderRadius = "30px";
+    taskContainer.style.margin = "auto";
+    taskContainer.style.display = "flex";
+    taskContainer.style.justifyContent = "center";
+    taskContainer.style.alignItems = "center";
+    taskContainer.style.columnGap = "5px";
+    taskContainer.style.marginTop = "20px";
+    taskContainer.classList.add("border", "border-dark");
     /** ********************************************** */
 
     /** ********************************************** */
@@ -42,11 +52,11 @@ function createTask(taskId, textInput) {
     /** ********************************************** */
 
     /** ********************************************** */
-    const taskContainer = document.createElement("div");
-    // taskContainer.style.backgroundColor = "lightBlue";
-    // taskContainer.style.height = "25px";
-    taskContainer.style.width = "130px";
-    // taskContainer.style.justifyContent = "center";
+    const headingContainer = document.createElement("div");
+    // headingContainer.style.backgroundColor = "lightBlue";
+    // headingContainer.style.height = "25px";
+    headingContainer.style.width = "130px";
+    // headingContainer.style.justifyContent = "center";
     /** ********************************************** */
 
     /** ********************************************** */
@@ -86,25 +96,37 @@ function createTask(taskId, textInput) {
     /** ********************************************** */
     buttonContainer.appendChild(completedBtn);
     buttonContainer.appendChild(deleteBtn);
-    taskContainer.appendChild(headingThree);
+    headingContainer.appendChild(headingThree);
+    taskContainer.appendChild(headingContainer);
+    taskContainer.appendChild(buttonContainer);
     mainTaskDiv.appendChild(taskContainer);
-    mainTaskDiv.appendChild(buttonContainer);
     allTaskDiv.appendChild(mainTaskDiv);
     document.body.appendChild(allTaskDiv);
     /** ********************************************** */
 
-    numOfTask = 0;
+    /** ********************************************** */
+    completedBtn.addEventListener("click", async () => {
 
-    completedBtn.addEventListener("click", () => {
+        const response = await fetch("/tasks", {
+            method: "PUT",
 
-        if (mainTaskDiv.style.background === "white") {
-            mainTaskDiv.style.background = "lightGreen";
-        }
-        else {
-            mainTaskDiv.style.background = "white";
-        }
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                id: taskId
+            })
+        });
+
+        taskContainer.style.background = "lightGreen";
+
+        const result = await response.json();
+        console.log(result.completed);
     });
+    /** ********************************************** */
 
+    /** ********************************************** */
     deleteBtn.addEventListener("click", async () => {
 
         const response = await fetch("/tasks", {
@@ -119,10 +141,11 @@ function createTask(taskId, textInput) {
             })
         });
 
-        allTaskDiv.removeChild(mainTaskDiv);
+        mainTaskDiv.removeChild(taskContainer);
 
         console.log("deleted");
     });
+    /** ********************************************** */
 }
 
 createButton.addEventListener("click", async () => {
@@ -150,7 +173,7 @@ createButton.addEventListener("click", async () => {
 
     // console.log(task);
 
-    createTask(task.id, usersTask);
+    createTask(task.id, usersTask, task.completed);
 });
 
 
@@ -162,6 +185,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     for (let i = 0; i < currentTask.length; i++) {
         let id = currentTask[i].id;
         let task = currentTask[i].text;
-        createTask(id, task);
+        let completed = currentTask[i].completed;
+        createTask(id, task, completed);
+
+        if (completed === 1) {
+            mainTaskDiv.childNodes[i].style.background = "lightGreen";
+            console.log("111");
+        }
     }
 });

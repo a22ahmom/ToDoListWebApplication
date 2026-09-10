@@ -52,6 +52,21 @@ app.delete("/tasks", (req, res) => {
     });
 });
 
+app.put("/tasks", (req, res) => {
+
+    const taskId = req.body.id;
+
+    const isCompleted = db.prepare(`
+        UPDATE tasks SET completed = 1 WHERE id = ?
+    `);
+
+    const result = isCompleted.run(taskId);
+
+    res.json({
+        completed: 1
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
