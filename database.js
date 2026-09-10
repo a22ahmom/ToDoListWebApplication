@@ -6,7 +6,8 @@ db.exec(`
     CREATE TABLE IF NOT EXISTS tasks (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         text TEXT NOT NULL,
-        completed INTEGER DEFAULT 0
+        completed INTEGER DEFAULT 0,
+        dueDate datetime default current_date
     )
 `);
 
