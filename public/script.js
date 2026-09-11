@@ -1,5 +1,14 @@
 const createButton = document.getElementById("createButton");
 const userInput = document.getElementById("userInput");
+const dueDate = document.getElementById("dueDate");
+
+// Assigning the minimum date to pick from date input.
+let currentDate = new Date();
+let currentYear = currentDate.getFullYear();
+let currentMonth = String(currentDate.getMonth() + 1).padStart(2, '0');
+let currentDay = String(currentDate.getDate()).padStart(2, '0');
+let formatedCurrentDate = currentYear + '-' + currentMonth + '-' + currentDay;
+dueDate.min = formatedCurrentDate;
 
 const allTaskDiv = document.createElement("div");
 // allTaskDiv.style.backgroundColor = "yellow";
