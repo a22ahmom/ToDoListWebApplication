@@ -3,13 +3,14 @@ const userInput = document.getElementById("userInput");
 const dueDate = document.getElementById("dueDate");
 const datePicker = document.getElementById("datePicker");
 
-// // Assigning the minimum date to pick from date input.
-// let currentDate = new Date();
-// let currentYear = currentDate.getFullYear();
-// let currentMonth = String(currentDate.getMonth() + 1).padStart(2, '0');
-// let currentDay = String(currentDate.getDate()).padStart(2, '0');
-// let formatedCurrentDate = currentYear + '-' + currentMonth + '-' + currentDay;
+// Assigning the minimum date to pick from date input.
+let currentDate = new Date();
+let currentYear = currentDate.getFullYear();
+let currentMonth = String(currentDate.getMonth() + 1).padStart(2, '0');
+let currentDay = String(currentDate.getDate()).padStart(2, '0');
+let formatedCurrentDate = currentDay + '-' + currentMonth + '-' + currentYear;
 // dueDate.min = formatedCurrentDate;
+dueDate.value = formatedCurrentDate;
 
 $(dueDate).datepicker({
     autoclose: true,
@@ -19,14 +20,14 @@ $(dueDate).datepicker({
 
 const allTaskDiv = document.createElement("div");
 // allTaskDiv.style.backgroundColor = "yellow";
-allTaskDiv.style.width = "400px";
+allTaskDiv.style.width = "500px";
 allTaskDiv.style.margin = "auto";
 
 // let mainTaskDiv;
 const mainTaskDiv = document.createElement("div");
 // mainTaskDiv.style.background = "purple";
 // mainTaskDiv.style.height = "40px";
-mainTaskDiv.style.width = "260px";
+mainTaskDiv.style.width = "400px";
 mainTaskDiv.style.borderRadius = "30px";
 mainTaskDiv.style.margin = "auto";
 mainTaskDiv.style.display = "block";
@@ -44,7 +45,7 @@ function createTask(taskId, textInput) {
     const taskContainer = document.createElement("div");
     taskContainer.style.background = "white";
     // taskContainer.style.height = "40px";
-    taskContainer.style.width = "260px";
+    taskContainer.style.width = "320px";
     taskContainer.style.borderRadius = "30px";
     taskContainer.style.margin = "auto";
     taskContainer.style.display = "flex";
@@ -110,9 +111,26 @@ function createTask(taskId, textInput) {
     /** ********************************************** */
 
     /** ********************************************** */
+    const dueDateContainer = document.createElement("div");
+    // dueDateContainer.style.backgroundColor = "yellow";
+    dueDateContainer.style.width = "80px";
+    dueDateContainer.style.height = "20px";
+
+    const displayDueDate = document.createElement("p");
+    displayDueDate.textContent = dueDate.value.trim();
+    displayDueDate.style.textAlign = "center";
+
+    const verticalLine = document.createElement("div");
+    verticalLine.classList.add("vr");
+    /** ********************************************** */
+
+    /** ********************************************** */
     buttonContainer.appendChild(completedBtn);
     buttonContainer.appendChild(deleteBtn);
     headingContainer.appendChild(headingThree);
+    dueDateContainer.appendChild(displayDueDate);
+    taskContainer.appendChild(dueDateContainer);
+    taskContainer.appendChild(verticalLine);
     taskContainer.appendChild(headingContainer);
     taskContainer.appendChild(buttonContainer);
     mainTaskDiv.appendChild(taskContainer);
