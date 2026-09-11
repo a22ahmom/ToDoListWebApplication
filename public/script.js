@@ -1,14 +1,21 @@
 const createButton = document.getElementById("createButton");
 const userInput = document.getElementById("userInput");
 const dueDate = document.getElementById("dueDate");
+const datePicker = document.getElementById("datePicker");
 
-// Assigning the minimum date to pick from date input.
-let currentDate = new Date();
-let currentYear = currentDate.getFullYear();
-let currentMonth = String(currentDate.getMonth() + 1).padStart(2, '0');
-let currentDay = String(currentDate.getDate()).padStart(2, '0');
-let formatedCurrentDate = currentYear + '-' + currentMonth + '-' + currentDay;
-dueDate.min = formatedCurrentDate;
+// // Assigning the minimum date to pick from date input.
+// let currentDate = new Date();
+// let currentYear = currentDate.getFullYear();
+// let currentMonth = String(currentDate.getMonth() + 1).padStart(2, '0');
+// let currentDay = String(currentDate.getDate()).padStart(2, '0');
+// let formatedCurrentDate = currentYear + '-' + currentMonth + '-' + currentDay;
+// dueDate.min = formatedCurrentDate;
+
+$(dueDate).datepicker({
+    autoclose: true,
+    format: 'dd-mm-yyyy',
+    container: datePicker
+});
 
 const allTaskDiv = document.createElement("div");
 // allTaskDiv.style.backgroundColor = "yellow";

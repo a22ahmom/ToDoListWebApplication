@@ -8,10 +8,23 @@ body {
     margin-top: 100px;
 }
 
+.div-container2 {
+    /* background-color: cadetblue; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .h1 {
     margin-top: 100px;
 }
 
-.input {
+#userInput {
     width: 500px;
+}
+
+#dueDate {
+    height: 32px;
+    cursor: pointer;
+    width: 120px;
 }
