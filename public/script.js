@@ -12,11 +12,7 @@ let formatedCurrentDate = currentDay + '-' + currentMonth + '-' + currentYear;
 // dueDate.min = formatedCurrentDate;
 dueDate.value = formatedCurrentDate;
 
-$(dueDate).datepicker({
-    autoclose: true,
-    format: 'dd-mm-yyyy',
-    container: datePicker
-});
+$(datePicker).datetimepicker({});
 
 const allTaskDiv = document.createElement("div");
 // allTaskDiv.style.backgroundColor = "yellow";
@@ -45,7 +41,7 @@ function createTask(taskId, textInput) {
     const taskContainer = document.createElement("div");
     taskContainer.style.background = "white";
     // taskContainer.style.height = "40px";
-    taskContainer.style.width = "320px";
+    taskContainer.style.width = "400px";
     taskContainer.style.borderRadius = "30px";
     taskContainer.style.margin = "auto";
     taskContainer.style.display = "flex";
@@ -113,7 +109,7 @@ function createTask(taskId, textInput) {
     /** ********************************************** */
     const dueDateContainer = document.createElement("div");
     // dueDateContainer.style.backgroundColor = "yellow";
-    dueDateContainer.style.width = "80px";
+    dueDateContainer.style.width = "150px";
     dueDateContainer.style.height = "20px";
 
     const displayDueDate = document.createElement("p");
