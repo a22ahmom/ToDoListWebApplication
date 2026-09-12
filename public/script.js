@@ -8,11 +8,17 @@ let currentDate = new Date();
 let currentYear = currentDate.getFullYear();
 let currentMonth = String(currentDate.getMonth() + 1).padStart(2, '0');
 let currentDay = String(currentDate.getDate()).padStart(2, '0');
-let formatedCurrentDate = currentDay + '-' + currentMonth + '-' + currentYear;
+let currentHour = String(currentDate.getHours()).padStart(2, '0');
+let currentMinutes = String(currentDate.getMinutes()).padStart(2, '0');
+let formatedCurrentDate = currentDay + '-' + currentMonth + '-' + currentYear + ' ' + currentHour + ':' + currentMinutes;
 // dueDate.min = formatedCurrentDate;
 dueDate.value = formatedCurrentDate;
 
-$(datePicker).datetimepicker({});
+// console.log("1.", dueDate.value);
+
+$(datePicker).datetimepicker({
+    format: 'DD/MM/YYYY HH:mm'
+});
 
 const allTaskDiv = document.createElement("div");
 // allTaskDiv.style.backgroundColor = "yellow";
@@ -35,13 +41,13 @@ mainTaskDiv.style.marginTop = "20px";
 
 // let numOfTask = 0;
 
-function createTask(taskId, textInput) {
+function createTask(taskId, textInput, dueDateInput) {
 
     /** ********************************************** */
     const taskContainer = document.createElement("div");
     taskContainer.style.background = "white";
     // taskContainer.style.height = "40px";
-    taskContainer.style.width = "400px";
+    taskContainer.style.width = "380px";
     taskContainer.style.borderRadius = "30px";
     taskContainer.style.margin = "auto";
     taskContainer.style.display = "flex";
@@ -109,11 +115,11 @@ function createTask(taskId, textInput) {
     /** ********************************************** */
     const dueDateContainer = document.createElement("div");
     // dueDateContainer.style.backgroundColor = "yellow";
-    dueDateContainer.style.width = "150px";
+    dueDateContainer.style.width = "120px";
     dueDateContainer.style.height = "20px";
 
     const displayDueDate = document.createElement("p");
-    displayDueDate.textContent = dueDate.value.trim();
+    displayDueDate.textContent = dueDateInput;
     displayDueDate.style.textAlign = "center";
 
     const verticalLine = document.createElement("div");
@@ -181,6 +187,7 @@ function createTask(taskId, textInput) {
 createButton.addEventListener("click", async () => {
 
     const usersTask = userInput.value.trim();
+    const taskDueDate = dueDate.value;
 
     if (usersTask === "") {
         console.log("Empty");
@@ -195,13 +202,14 @@ createButton.addEventListener("click", async () => {
         },
 
         body: JSON.stringify({
-            text: usersTask
+            text: usersTask,
+            dueDate: taskDueDate
         })
     });
 
     const task = await response.json();
 
-    // console.log(task);
+    // console.log(task.dueDate);
 
     createTask(task.id, usersTask, task.completed);
 });
@@ -216,11 +224,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         let id = currentTask[i].id;
         let task = currentTask[i].text;
         let completed = currentTask[i].completed;
-        createTask(id, task, completed);
+        let due_date = currentTask[i].dueDate;
+        createTask(id, task, due_date);
 
         if (completed === 1) {
             mainTaskDiv.childNodes[i].style.background = "lightGreen";
-            console.log("111");
+            // console.log("111");
         }
     }
 });

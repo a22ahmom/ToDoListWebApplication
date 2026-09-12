@@ -20,20 +20,22 @@ app.get("/tasks", (req, res) => {
 });
 
 app.post("/tasks", (req, res) => {
-    
-    const text = req.body.text;
 
-    const insertTask = db.prepare(`
-        INSERT INTO tasks (text)
-        VALUES (?)
+    const text = req.body.text;
+    const due_date = req.body.dueDate;
+
+    const insertTaskText = db.prepare(`
+        INSERT INTO tasks (text, dueDate)
+        VALUES (?, ?)
     `);
 
-    const result = insertTask.run(text);
+    const newTaskText = insertTaskText.run(text, due_date);
 
     res.json({
-        id: result.lastInsertRowid,
+        id: newTaskText.lastInsertRowid,
         text: text,
-        completed: 0
+        completed: 0,
+        dueDate: due_date
     });
 });
 
