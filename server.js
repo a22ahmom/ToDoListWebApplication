@@ -23,19 +23,21 @@ app.post("/tasks", (req, res) => {
 
     const text = req.body.text;
     const due_date = req.body.dueDate;
+    const task_exist = req.body.exist;
 
     const insertTaskText = db.prepare(`
-        INSERT INTO tasks (text, dueDate)
-        VALUES (?, ?)
+        INSERT INTO tasks (text, dueDate, exist)
+        VALUES (?, ?, ?)
     `);
 
-    const newTaskText = insertTaskText.run(text, due_date);
+    const newTaskText = insertTaskText.run(text, due_date, task_exist);
 
     res.json({
         id: newTaskText.lastInsertRowid,
         text: text,
         completed: 0,
-        dueDate: due_date
+        dueDate: due_date,
+        exist: task_exist
     });
 });
 
