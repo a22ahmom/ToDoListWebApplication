@@ -16,39 +16,19 @@ class Task {
         return this.taskId;
     }
 
-    setTaskId(id) {
-        this.taskId = id;
-    }
-
     getTaskText() {
         return this.taskText;
-    }
-
-    setTaskText(text) {
-        this.taskText = text;
     }
 
     getTaskCompleted() {
         return this.taskCompleted;
     }
 
-    setTaskCompleted(completed) {
-        this.taskCompleted = completed;
-    }
-
     getTaskDueDate() {
         return this.taskDueDate;
     }
 
-    setTaskDueDate(dueDate) {
-        this.taskDueDate = dueDate;
-    }
-
     getTaskExist() {
         return this.exist;
-    }
-
-    setTaskExist(taskExist) {
-        this.exist = taskExist;
     }
 }

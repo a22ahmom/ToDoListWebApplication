@@ -3,6 +3,18 @@ const userInput = document.getElementById("userInput");
 const dueDate = document.getElementById("dueDate");
 const datePicker = document.getElementById("datePicker");
 const prioritizeButton = document.getElementById("prioritizeButton");
+const allTaskDiv = document.getElementById("allTaskDiv");
+
+const mainTaskDiv = document.createElement("div");
+// mainTaskDiv.style.background = "purple";
+mainTaskDiv.style.width = "400px";
+mainTaskDiv.style.borderRadius = "30px";
+mainTaskDiv.style.margin = "auto";
+mainTaskDiv.style.display = "block";
+mainTaskDiv.style.justifyContent = "center";
+mainTaskDiv.style.alignItems = "center";
+mainTaskDiv.style.columnGap = "5px";
+mainTaskDiv.style.marginTop = "20px";
 
 // Assigning the minimum date to pick from date input.
 let currentDate = new Date();
@@ -15,41 +27,34 @@ let formatedCurrentDate = currentYear + '-' + currentMonth + '-' + currentDay + 
 // dueDate.min = formatedCurrentDate;
 dueDate.value = formatedCurrentDate;
 
-// console.log(formatedCurrentDate);
-
 $(datePicker).datetimepicker({
-    // format: 'DD/MM/YYYY HH:mm'
     format: 'YYYY/MM/DD HH:mm'
 });
 
-const allTaskDiv = document.createElement("div");
-// allTaskDiv.style.backgroundColor = "yellow";
-allTaskDiv.style.width = "500px";
-allTaskDiv.style.margin = "auto";
+window.onload = async function () {
 
-// let mainTaskDiv;
-const mainTaskDiv = document.createElement("div");
-// mainTaskDiv.style.background = "purple";
-// mainTaskDiv.style.height = "40px";
-mainTaskDiv.style.width = "400px";
-mainTaskDiv.style.borderRadius = "30px";
-mainTaskDiv.style.margin = "auto";
-mainTaskDiv.style.display = "block";
-mainTaskDiv.style.justifyContent = "center";
-mainTaskDiv.style.alignItems = "center";
-mainTaskDiv.style.columnGap = "5px";
-mainTaskDiv.style.marginTop = "20px";
-// mainTaskDiv.classList.add("border", "border-dark");
+    const response = await fetch("/tasks");
+    const currentTask = await response.json();
 
-function createTask(task) {
+    if (currentTask.length === 0) {
+        document.body.removeChild(allTaskDiv);
+    }
+    else {
+        console.log("Something there!");
+    }
+};
 
-    let taskId = task.getTaskId();
-    let textInput = task.getTaskText();
-    let isCompleted = task.getTaskCompleted();
-    let dueDateInput = task.getTaskDueDate();
-    let taskExist = task.getTaskExist();
+function createTask(taskId, taskText, taskIsCompleted, taskDueDate, taskExist) {
 
-    /** ********************************************** */
+    const newTask = new Task(taskId, taskText, taskIsCompleted, taskDueDate, taskExist);
+
+    let taskIdInput = newTask.getTaskId();
+    let taskTextInput = newTask.getTaskText();
+    let taskIsCompletedInput = newTask.getTaskCompleted();
+    let taskDueDateInput = newTask.getTaskDueDate();
+    let taskExistInput = newTask.getTaskExist();
+
+    // /** ********************************************** */
     const taskContainer = document.createElement("div");
     taskContainer.style.background = "white";
     // taskContainer.style.height = "40px";
@@ -69,7 +74,7 @@ function createTask(task) {
     headingThree.style.margin = "auto";
     headingThree.style.wordBreak = "break-word";
     headingThree.style.whiteSpace = "normal";
-    headingThree.textContent = textInput;
+    headingThree.textContent = taskTextInput;
     // headingThree.style.color = "black";
     headingThree.style.fontWeight = "normal";
     headingThree.classList.add("h5");
@@ -79,9 +84,7 @@ function createTask(task) {
     /** ********************************************** */
     const headingContainer = document.createElement("div");
     // headingContainer.style.backgroundColor = "lightBlue";
-    // headingContainer.style.height = "25px";
     headingContainer.style.width = "130px";
-    // headingContainer.style.justifyContent = "center";
     /** ********************************************** */
 
     /** ********************************************** */
@@ -125,29 +128,26 @@ function createTask(task) {
     dueDateContainer.style.height = "20px";
 
     const displayDueDate = document.createElement("p");
-    displayDueDate.textContent = dueDateInput;
     displayDueDate.style.textAlign = "center";
+    displayDueDate.textContent = taskDueDateInput;
 
     const verticalLine = document.createElement("div");
     verticalLine.classList.add("vr");
     /** ********************************************** */
 
-    if (taskExist) {
-
-        /** ********************************************** */
-        buttonContainer.appendChild(completedBtn);
-        buttonContainer.appendChild(deleteBtn);
-        headingContainer.appendChild(headingThree);
-        dueDateContainer.appendChild(displayDueDate);
-        taskContainer.appendChild(dueDateContainer);
-        taskContainer.appendChild(verticalLine);
-        taskContainer.appendChild(headingContainer);
-        taskContainer.appendChild(buttonContainer);
-        mainTaskDiv.appendChild(taskContainer);
-        allTaskDiv.appendChild(mainTaskDiv);
-        document.body.appendChild(allTaskDiv);
-        /** ********************************************** */
-    }
+    /** ********************************************** */
+    buttonContainer.appendChild(completedBtn);
+    buttonContainer.appendChild(deleteBtn);
+    headingContainer.appendChild(headingThree);
+    dueDateContainer.appendChild(displayDueDate);
+    taskContainer.appendChild(dueDateContainer);
+    taskContainer.appendChild(verticalLine);
+    taskContainer.appendChild(headingContainer);
+    taskContainer.appendChild(buttonContainer);
+    mainTaskDiv.appendChild(taskContainer);
+    allTaskDiv.appendChild(mainTaskDiv);
+    document.body.appendChild(allTaskDiv);
+    /** ********************************************** */
 
     /** ********************************************** */
     completedBtn.addEventListener("click", async () => {
@@ -160,7 +160,7 @@ function createTask(task) {
             },
 
             body: JSON.stringify({
-                id: taskId
+                id: taskIdInput
             })
         });
 
@@ -182,13 +182,11 @@ function createTask(task) {
             },
 
             body: JSON.stringify({
-                id: taskId
+                id: taskIdInput
             })
         });
 
         mainTaskDiv.removeChild(taskContainer);
-
-        // console.log("deleted");
     });
     /** ********************************************** */
 }
@@ -219,11 +217,7 @@ createButton.addEventListener("click", async () => {
 
     const task = await response.json();
 
-    const newTask = new Task(task.id, usersTask, task.completed, task.dueDate, task.exist);
-
-    createTask(newTask);
-    // newTask.print();
-    // console.log(newTask);
+    createTask(task.id, usersTask, task.completed, task.dueDate, task.exist);
 });
 
 const timer = ms => new Promise(res => setTimeout(res, ms))
@@ -242,14 +236,15 @@ prioritizeButton.addEventListener("click", async () => {
     );
 
     for (let i = 0; i < currentTask.length; i++) {
+        await timer(750);
         let id = currentTask[i].id;
         let task = currentTask[i].text;
         let completed = currentTask[i].completed;
         let due_date = currentTask[i].dueDate;
         let task_exist = currentTask[i].exist;
 
-        const loadTask = new Task(id, task, completed, due_date, task_exist);
-        createTask(loadTask);
+        // const loadTask = new Task(id, task, completed, due_date, task_exist);
+        createTask(id, task, completed, due_date, task_exist);
 
         if (completed === 1) {
             mainTaskDiv.childNodes[i].style.background = "lightGreen";
@@ -261,20 +256,27 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const response = await fetch("/tasks");
     const currentTask = await response.json();
-    // console.log(currentTask);
+    // console.log(currentTask.length);
 
-    for (let i = 0; i < currentTask.length; i++) {
-        let id = currentTask[i].id;
-        let task = currentTask[i].text;
-        let completed = currentTask[i].completed;
-        let due_date = currentTask[i].dueDate;
-        let task_exist = currentTask[i].exist;
+    if (currentTask.length !== 0) {
 
-        const loadTask = new Task(id, task, completed, due_date, task_exist);
-        createTask(loadTask);
+        for (let i = 0; i < currentTask.length; i++) {
+            await timer(750);
+            let id = currentTask[i].id;
+            let task = currentTask[i].text;
+            let completed = currentTask[i].completed;
+            let due_date = currentTask[i].dueDate;
+            let task_exist = currentTask[i].exist;
 
-        if (completed === 1) {
-            mainTaskDiv.childNodes[i].style.background = "lightGreen";
+            // const loadTask = new Task(id, task, completed, due_date, task_exist);
+            createTask(id, task, completed, due_date, task_exist);
+
+            if (completed === 1) {
+                mainTaskDiv.childNodes[i].style.background = "lightGreen";
+            }
         }
+    }
+    else {
+        console.log("empty");
     }
 });
