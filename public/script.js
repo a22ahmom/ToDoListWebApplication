@@ -16,6 +16,8 @@ mainTaskDiv.style.alignItems = "center";
 mainTaskDiv.style.columnGap = "5px";
 mainTaskDiv.style.marginTop = "20px";
 
+const API_URL = "https://todolistwebapplication-ofkq.onrender.com/";
+
 const now = moment();
 
 $(datePicker).datetimepicker({
@@ -33,7 +35,7 @@ $(datePicker).on("dp.change", function (event) {
 
 window.onload = async function () {
 
-    const response = await fetch("/tasks");
+    const response = await fetch(`${API_URL}/tasks`);
     const currentTask = await response.json();
 
     if (currentTask.length === 0) {
@@ -167,7 +169,7 @@ function createTask(taskId, taskText, taskIsCompleted, taskDueDate, taskExist) {
     /** ********************************************** */
     completedBtn.addEventListener("click", async () => {
 
-        const response = await fetch("/tasks", {
+        const response = await fetch(`${API_URL}/tasks`, {
             method: "PUT",
 
             headers: {
@@ -186,7 +188,7 @@ function createTask(taskId, taskText, taskIsCompleted, taskDueDate, taskExist) {
     /** ********************************************** */
     deleteBtn.addEventListener("click", async () => {
 
-        const response = await fetch("/tasks", {
+        const response = await fetch(`${API_URL}/tasks`, {
             method: "DELETE",
 
             headers: {
@@ -212,7 +214,7 @@ createButton.addEventListener("click", async () => {
         return;
     }
 
-    const response = await fetch("/tasks", {
+    const response = await fetch(`${API_URL}/tasks`, {
         method: "POST",
 
         headers: {
@@ -239,7 +241,7 @@ prioritizeButton.addEventListener("click", async () => {
         mainTaskDiv.removeChild(mainTaskDiv.childNodes[i]);
     }
 
-    const response = await fetch("/tasks");
+    const response = await fetch(`${API_URL}/tasks`);
     const currentTask = await response.json();
 
     currentTask.sort((a, b) =>
@@ -264,7 +266,7 @@ prioritizeButton.addEventListener("click", async () => {
 
 document.addEventListener("DOMContentLoaded", async function () {
 
-    const response = await fetch("/tasks");
+    const response = await fetch(`${API_URL}/tasks`);
     const currentTask = await response.json();
 
     if (currentTask.length !== 0) {
