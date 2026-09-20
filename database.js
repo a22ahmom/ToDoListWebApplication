@@ -1,15 +1,9 @@
-const Database = require("better-sqlite3");
+require("dotenv").config();
 
-const db = new Database("tasks.db");
+const { Pool } = require("pg");
 
-db.exec(`
-    CREATE TABLE IF NOT EXISTS tasks (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        text TEXT NOT NULL,
-        completed INTEGER DEFAULT 0,
-        dueDate datetime,
-        exist INTEGER DEFAULT 0
-    )
-`);
+const db = new Pool({
+    connectionString: process.env.DATABASE_URL
+});
 
 module.exports = db;

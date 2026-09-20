@@ -16,19 +16,19 @@ mainTaskDiv.style.alignItems = "center";
 mainTaskDiv.style.columnGap = "5px";
 mainTaskDiv.style.marginTop = "20px";
 
-// Assigning the minimum date to pick from date input.
-let currentDate = new Date();
-let currentYear = currentDate.getFullYear();
-let currentMonth = String(currentDate.getMonth() + 1).padStart(2, '0');
-let currentDay = String(currentDate.getDate()).padStart(2, '0');
-let currentHour = String(currentDate.getHours()).padStart(2, '0');
-let currentMinutes = String(currentDate.getMinutes()).padStart(2, '0');
-let formatedCurrentDate = currentYear + '-' + currentMonth + '-' + currentDay + ' ' + currentHour + ':' + currentMinutes;
-// dueDate.min = formatedCurrentDate;
-dueDate.value = formatedCurrentDate;
+const now = moment();
 
 $(datePicker).datetimepicker({
-    format: 'YYYY/MM/DD HH:mm'
+    format: 'YYYY-MM-DD HH:mm',
+    defaultDate: now,
+    minDate: now
+});
+
+$(datePicker).on("dp.change", function (event) {
+
+    if (event.date) {
+        dueDate.value = event.date.format("YYYY-MM-DD HH:mm");
+    }
 });
 
 window.onload = async function () {
@@ -38,9 +38,6 @@ window.onload = async function () {
 
     if (currentTask.length === 0) {
         document.body.removeChild(allTaskDiv);
-    }
-    else {
-        console.log("Something there!");
     }
 };
 
@@ -53,6 +50,24 @@ function createTask(taskId, taskText, taskIsCompleted, taskDueDate, taskExist) {
     let taskIsCompletedInput = newTask.getTaskCompleted();
     let taskDueDateInput = newTask.getTaskDueDate();
     let taskExistInput = newTask.getTaskExist();
+
+    let formattedDueDate = "";
+
+    if (taskDueDateInput) {
+
+        const date = new Date(taskDueDateInput);
+
+        if (!isNaN(date.getTime())) {
+
+            formattedDueDate = date.toLocaleString("sv-SE", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+        }
+    }
 
     // /** ********************************************** */
     const taskContainer = document.createElement("div");
@@ -129,7 +144,7 @@ function createTask(taskId, taskText, taskIsCompleted, taskDueDate, taskExist) {
 
     const displayDueDate = document.createElement("p");
     displayDueDate.style.textAlign = "center";
-    displayDueDate.textContent = taskDueDateInput;
+    displayDueDate.textContent = formattedDueDate;
 
     const verticalLine = document.createElement("div");
     verticalLine.classList.add("vr");
@@ -165,9 +180,6 @@ function createTask(taskId, taskText, taskIsCompleted, taskDueDate, taskExist) {
         });
 
         taskContainer.style.background = "lightGreen";
-
-        const result = await response.json();
-        // console.log(result.completed);
     });
     /** ********************************************** */
 
@@ -197,7 +209,6 @@ createButton.addEventListener("click", async () => {
     const taskDueDate = dueDate.value;
 
     if (usersTask === "") {
-        // console.log("Empty");
         return;
     }
 
@@ -209,15 +220,15 @@ createButton.addEventListener("click", async () => {
         },
 
         body: JSON.stringify({
-            text: usersTask,
-            dueDate: taskDueDate,
+            task: usersTask,
+            duedate: taskDueDate,
             exist: 1
         })
     });
 
     const task = await response.json();
 
-    createTask(task.id, usersTask, task.completed, task.dueDate, task.exist);
+    createTask(task.id, usersTask, task.completed, task.duedate, task.exist);
 });
 
 const timer = ms => new Promise(res => setTimeout(res, ms))
@@ -232,18 +243,17 @@ prioritizeButton.addEventListener("click", async () => {
     const currentTask = await response.json();
 
     currentTask.sort((a, b) =>
-        a.dueDate > b.dueDate ? 1 : -1
+        a.duedate > b.duedate ? 1 : -1
     );
 
     for (let i = 0; i < currentTask.length; i++) {
         await timer(750);
         let id = currentTask[i].id;
-        let task = currentTask[i].text;
+        let task = currentTask[i].task;
         let completed = currentTask[i].completed;
-        let due_date = currentTask[i].dueDate;
+        let due_date = currentTask[i].duedate;
         let task_exist = currentTask[i].exist;
 
-        // const loadTask = new Task(id, task, completed, due_date, task_exist);
         createTask(id, task, completed, due_date, task_exist);
 
         if (completed === 1) {
@@ -256,27 +266,22 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const response = await fetch("/tasks");
     const currentTask = await response.json();
-    // console.log(currentTask.length);
 
     if (currentTask.length !== 0) {
 
         for (let i = 0; i < currentTask.length; i++) {
             await timer(750);
             let id = currentTask[i].id;
-            let task = currentTask[i].text;
+            let task = currentTask[i].task;
             let completed = currentTask[i].completed;
-            let due_date = currentTask[i].dueDate;
+            let due_date = currentTask[i].duedate;
             let task_exist = currentTask[i].exist;
 
-            // const loadTask = new Task(id, task, completed, due_date, task_exist);
             createTask(id, task, completed, due_date, task_exist);
 
             if (completed === 1) {
                 mainTaskDiv.childNodes[i].style.background = "lightGreen";
             }
         }
-    }
-    else {
-        console.log("empty");
     }
 });
