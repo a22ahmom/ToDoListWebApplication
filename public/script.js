@@ -16,7 +16,10 @@ mainTaskDiv.style.alignItems = "center";
 mainTaskDiv.style.columnGap = "5px";
 mainTaskDiv.style.marginTop = "20px";
 
-const API_URL = "https://todolistwebapplication-ofkq.onrender.com/";
+const API_URL =
+    window.location.hostname === "localhost"
+        ? ""
+        : "https://todolistwebapplication-ofkq.onrender.com";
 
 const now = moment();
 
