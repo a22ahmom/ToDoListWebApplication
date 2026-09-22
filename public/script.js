@@ -16,19 +16,25 @@ mainTaskDiv.style.alignItems = "center";
 mainTaskDiv.style.columnGap = "5px";
 mainTaskDiv.style.marginTop = "20px";
 
+// Changes the API_URL based on if the hostname equals localhost or not
 const API_URL =
     window.location.hostname === "localhost"
         ? ""
         : "https://todolistwebapplication-ofkq.onrender.com";
 
+// Stores the current date and time as an object
+// using Moment.js library
 const now = moment();
 
 $(datePicker).datetimepicker({
     format: 'YYYY-MM-DD HH:mm',
-    defaultDate: now,
-    minDate: now
+    defaultDate: now,   // The pickers default date
+    minDate: now        // Dates before this can't be selected
 });
 
+// Whenever the datetime picker changes
+// check if the date is valid
+// and then format the date accordingly
 $(datePicker).on("dp.change", function (event) {
 
     if (event.date) {
@@ -52,26 +58,13 @@ function createTask(taskId, taskText, taskIsCompleted, taskDueDate, taskExist) {
 
     let taskIdInput = newTask.getTaskId();
     let taskTextInput = newTask.getTaskText();
-    let taskIsCompletedInput = newTask.getTaskCompleted();
     let taskDueDateInput = newTask.getTaskDueDate();
-    let taskExistInput = newTask.getTaskExist();
 
     let formattedDueDate = "";
 
-    if (taskDueDateInput) {
-
-        const date = new Date(taskDueDateInput);
-
-        if (!isNaN(date.getTime())) {
-
-            formattedDueDate = date.toLocaleString("sv-SE", {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-                hour: "2-digit",
-                minute: "2-digit"
-            });
-        }
+    if (taskDueDateInput) { // If the date is not null, undefined or empty, 
+        //proceed.
+        formattedDueDate = taskDueDateInput;
     }
 
     // /** ********************************************** */
@@ -172,7 +165,7 @@ function createTask(taskId, taskText, taskIsCompleted, taskDueDate, taskExist) {
     /** ********************************************** */
     completedBtn.addEventListener("click", async () => {
 
-        const response = await fetch(`${API_URL}/tasks`, {
+        await fetch(`${API_URL}/tasks`, {
             method: "PUT",
 
             headers: {
@@ -191,7 +184,7 @@ function createTask(taskId, taskText, taskIsCompleted, taskDueDate, taskExist) {
     /** ********************************************** */
     deleteBtn.addEventListener("click", async () => {
 
-        const response = await fetch(`${API_URL}/tasks`, {
+        await fetch(`${API_URL}/tasks`, {
             method: "DELETE",
 
             headers: {

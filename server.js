@@ -24,7 +24,7 @@ app.get("/tasks", async (req, res) => {
                     id,
                     task,
                     completed,
-                    duedate,
+                    TO_CHAR(duedate, 'YYYY-MM-DD HH24:MI') AS duedate,
                     exist
                 FROM tasks
                 ORDER BY id
@@ -55,7 +55,7 @@ app.post("/tasks", async (req, res) => {
             id,
             task,
             completed,
-            duedate,
+            TO_CHAR(duedate, 'YYYY-MM-DD HH24:MI') AS duedate,
             exist
     `, [
             task,
